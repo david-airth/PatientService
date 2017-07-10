@@ -5,11 +5,11 @@ package com.flex.dhp.patientservice;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Collection;
 
 @RestController
@@ -37,8 +37,24 @@ public class PatientRestController {
 		return this.patientRepository.findOne(patientId).getCarecards();
 	}
 
-	private void validatePatient(long patientId) {
+	@RequestMapping(value = "/carecards", method = RequestMethod.POST)
+	ResponseEntity<?> add(@PathVariable long patientId, @RequestBody Carecard carecard) {
+		Patient patient = this.validatePatient(patientId);
+
+		Carecard result = carecardRepository.save(new Carecard(patient, carecard.name));
+
+		URI location = ServletUriComponentsBuilder
+				.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(result.getId()).toUri();
+
+		return ResponseEntity.created(location).build();
+	}
+
+	private Patient validatePatient(long patientId) {
 		Patient patient = this.patientRepository.findOne(patientId);
-		if(patient == null) throw new PatientNotFoundException(patientId);
+		if (patient == null)
+			throw new PatientNotFoundException(patientId);
+		else
+			return patient;
 	}
 }

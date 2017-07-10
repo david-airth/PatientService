@@ -105,6 +105,23 @@ public class PatientRestControllerTests {
                 .andExpect(jsonPath("$[1].id", is(this.carecardList.get(1).getId().intValue())));
     }
 
+    @Test
+    public void createCarecard() throws Exception {
+
+        String carecardJson = json(new Carecard(this.patient, "A new CareCard"));
+
+        String urlTemplate = String.format("/patient/%s/carecards", this.patient.getId());
+
+        this.mockMvc.perform(post(urlTemplate)
+                .contentType(contentType)
+                .content(carecardJson))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get(urlTemplate))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(3)));
+    }
 
     protected String json(Object o) throws IOException {
         MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();

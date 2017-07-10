@@ -8,5 +8,5 @@ import java.util.Optional;
  * Created by david.airth on 7/10/17.
  */
 public interface PatientRepository extends JpaRepository<Patient, Long> {
-	Patient findById(long id);
+
 }
