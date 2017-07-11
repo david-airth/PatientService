@@ -22,10 +22,11 @@ public class Application {
 	CommandLineRunner init(PatientRepository patientRepository,
 						   CarecardRepository carecardRepository) {
 		return (evt) -> Arrays.asList(
-				"Smith,Jones,Adams,Lee,Rho,Fisher,Pollack,Long".split(","))
+				"Joe:Smith,Jan:Jones,Bob:Adams,Janet:Lee,Richard:Rho,Don:Fisher,Shirley:Pollack,Susan:Long".split(","))
 				.forEach(
 						a -> {
-							Patient patient = patientRepository.save(new Patient("Joe", a));
+							String name[] = a.split(":");
+							Patient patient = patientRepository.save(new Patient(name[0], name[1]));
 							carecardRepository.save(new Carecard(patient,"Care Card 1"));
 							carecardRepository.save(new Carecard(patient,"Care Card 2"));
 						});

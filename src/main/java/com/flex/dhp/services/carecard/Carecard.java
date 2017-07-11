@@ -3,10 +3,7 @@ package com.flex.dhp.services.carecard;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flex.dhp.services.patient.Patient;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 
 /**
@@ -18,11 +15,20 @@ public class Carecard {
 	@GeneratedValue
 	private Long id;
 
-	public String name;
+	@Column(nullable = false)
+	private String name;
 
 	@JsonIgnore
 	@ManyToOne
 	private Patient patient;
+
+	public Carecard(Patient patient, String name) {
+		this.patient = patient;
+		this.name = name;
+	}
+
+	Carecard() { // jpa only
+	}
 
 	public Long getId() {
 		return id;
@@ -40,13 +46,7 @@ public class Carecard {
 		return patient;
 	}
 
-	public Carecard(Patient patient, String name) {
-		this.patient = patient;
-		this.name = name;
-	}
 
-	Carecard() { // jpa only
-	}
 }
 
 

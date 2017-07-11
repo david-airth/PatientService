@@ -2,10 +2,7 @@ package com.flex.dhp.services.patient;
 
 import com.flex.dhp.services.carecard.Carecard;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,16 +11,26 @@ import java.util.Set;
  */
 @Entity
 public class Patient {
-	@OneToMany(mappedBy = "patient")
-	private Set<Carecard> carecards = new HashSet<>();
-
 	@Id
 	@GeneratedValue
 	private Long id;
 
-	public Set<Carecard> getCarecards() {
-		return carecards;
-	}
+    @Column(nullable = false)
+    private String firstname;
+
+    @Column(nullable = false)
+    private String lastname;
+
+    @OneToMany(mappedBy = "patient")
+    private Set<Carecard> carecards = new HashSet<>();
+
+    public Patient(String firstname, String lastname) {
+        this.lastname = lastname;
+        this.firstname = firstname;
+    }
+
+    Patient() {
+    } // jpa only
 
 	public Long getId() {
 		return id;
@@ -37,13 +44,8 @@ public class Patient {
 		return lastname;
 	}
 
-	public String firstname;
-	public String lastname;
+    public Set<Carecard> getCarecards() {
+        return carecards;
+    }
 
-	public Patient(String firstname, String lastname) {
-		this.lastname = lastname;
-		this.firstname = firstname;
-	}
-
-	Patient() { // jpa only
-	}}
+}

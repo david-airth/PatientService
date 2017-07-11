@@ -57,7 +57,7 @@ public class CarecardRestController extends BaseRestController {
 
         Carecard currentCarecard = this.validateCarecard(carecardId);
 
-        currentCarecard.setName(carecard.name);
+        currentCarecard.setName(carecard.getName());
 
         this.carecardRepository.save(currentCarecard);
 
@@ -72,7 +72,7 @@ public class CarecardRestController extends BaseRestController {
 
         Patient patient = this.validatePatient(patientId);
 
-        Carecard result = carecardRepository.save(new Carecard(patient, carecard.name));
+        Carecard result = carecardRepository.save(new Carecard(patient, carecard.getName()));
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}")
@@ -85,6 +85,8 @@ public class CarecardRestController extends BaseRestController {
     ResponseEntity<?> delete(@PathVariable long carecardId) {
 
         Assert.isTrue(carecardId > 0, "careCardId is required");
+
+        validateCarecard(carecardId);
 
         carecardRepository.delete(carecardId);
 
