@@ -1,4 +1,4 @@
-package com.flex.dhp.services;
+package com.flex.dhp.services.carecard;
 
 /**
  * Created by david.airth on 7/11/17.

@@ -1,5 +1,7 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.carecard.Carecard;
+import com.flex.dhp.services.patient.Patient;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

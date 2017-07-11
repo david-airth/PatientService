@@ -1,9 +1,10 @@
-package com.flex.dhp.services;
+package com.flex.dhp.services.patient;
 
 /**
  * Created by david.airth on 7/10/17.
  */
 
+import com.flex.dhp.services.BaseRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,4 +1,6 @@
-package com.flex.dhp.services;
+package com.flex.dhp.services.patient;
+
+import com.flex.dhp.services.carecard.Carecard;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

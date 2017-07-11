@@ -1,5 +1,9 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.carecard.Carecard;
+import com.flex.dhp.services.carecard.CarecardRepository;
+import com.flex.dhp.services.patient.Patient;
+import com.flex.dhp.services.patient.PatientRepository;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

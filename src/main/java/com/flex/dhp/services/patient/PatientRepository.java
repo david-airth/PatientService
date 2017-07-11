@@ -1,4 +1,4 @@
-package com.flex.dhp.services;
+package com.flex.dhp.services.patient;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

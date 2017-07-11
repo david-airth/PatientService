@@ -1,5 +1,9 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.carecard.Carecard;
+import com.flex.dhp.services.carecard.CarecardRepository;
+import com.flex.dhp.services.patient.Patient;
+import com.flex.dhp.services.patient.PatientRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

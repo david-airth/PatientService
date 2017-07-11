@@ -1,5 +1,6 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.carecard.Carecard;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

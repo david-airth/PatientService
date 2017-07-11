@@ -1,9 +1,9 @@
-package com.flex.dhp.services;
+package com.flex.dhp.services.patient;
 
 /**
  * Created by david.airth on 7/10/17.
  */
-class PatientNotFoundException extends RuntimeException {
+public class PatientNotFoundException extends RuntimeException {
 
 	public PatientNotFoundException(long patientId) {
 		super("could not find patient '" + patientId + "'.");
