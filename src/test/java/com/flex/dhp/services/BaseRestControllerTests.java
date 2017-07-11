@@ -1,4 +1,4 @@
-package com.flex.dhp.patientservice;
+package com.flex.dhp.services;
 
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.flex.dhp.patientservice;
+package com.flex.dhp.services;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

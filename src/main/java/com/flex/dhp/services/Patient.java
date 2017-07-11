@@ -1,6 +1,4 @@
-package com.flex.dhp.patientservice;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.flex.dhp.services;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

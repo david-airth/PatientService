@@ -1,4 +1,4 @@
-package com.flex.dhp.patientservice;
+package com.flex.dhp.services;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

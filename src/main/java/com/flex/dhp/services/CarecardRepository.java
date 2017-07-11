@@ -1,9 +1,8 @@
-package com.flex.dhp.patientservice;
+package com.flex.dhp.services;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * Created by david.airth on 7/10/17.
