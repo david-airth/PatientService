@@ -31,6 +31,10 @@ public class Carecard {
 		return name;
 	}
 
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
 	public Patient getPatient() {
 		return patient;
 	}

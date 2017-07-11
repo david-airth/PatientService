@@ -27,12 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
 /**
- * Created by david.airth on 7/10/17.
+ * Created by david.airth on 7/11/17.
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class PatientRestControllerTests {
+public class CarecardRestControllerTests {
     private MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));
@@ -82,19 +82,46 @@ public class PatientRestControllerTests {
     }
 
     @Test
-    public void patientNotFound() throws Exception {
-        mockMvc.perform(get("/patient/99999/"))
+    public void carecardNotFound() throws Exception {
+        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/999999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void readSinglePatient() throws Exception {
-        mockMvc.perform(get("/patient/" + this.patient.getId()))
+    public void readSingleCarecard() throws Exception {
+        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/" + this.carecardList.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.id", is(this.patient.getId().intValue())))
-                .andExpect(jsonPath("$.firstname", is(this.patient.getFirstname())))
-                .andExpect(jsonPath("$.lastname", is(this.patient.getLastname())));
+                .andExpect(jsonPath("$.id", is(this.carecardList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$.name", is(this.carecardList.get(0).getName())));
+    }
+
+    @Test
+    public void readCarecards() throws Exception {
+        mockMvc.perform(get("/carecards/" + this.patient.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id", is(this.carecardList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$[1].id", is(this.carecardList.get(1).getId().intValue())));
+    }
+
+    @Test
+    public void createCarecard() throws Exception {
+
+        String carecardJson = json(new Carecard(this.patient, "A new CareCard"));
+
+        String urlTemplate = String.format("/carecards/%s", this.patient.getId());
+
+        this.mockMvc.perform(post(urlTemplate)
+                .contentType(contentType)
+                .content(carecardJson))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get(urlTemplate))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(3)));
     }
 
     protected String json(Object o) throws IOException {

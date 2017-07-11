@@ -8,15 +8,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.hateoas.VndErrors;
 
 /**
- * Created by david.airth on 7/10/17.
+ * Created by david.airth on 7/11/17.
  */
 @ControllerAdvice
-class PatientControllerAdvice {
-
-	@ResponseBody
-	@ExceptionHandler(PatientNotFoundException.class)
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	VndErrors patientNotFoundExceptionHandler(PatientNotFoundException ex) {
-		return new VndErrors("error", ex.getMessage());
-	}
+public class CarecardControllerAdvice {
+    @ResponseBody
+    @ExceptionHandler(CarecardNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    VndErrors carecardNotFoundExceptionHandler(CarecardNotFoundException ex) {
+        return new VndErrors("error", ex.getMessage());
+    }
 }
