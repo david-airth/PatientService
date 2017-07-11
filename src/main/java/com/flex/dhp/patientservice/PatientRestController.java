@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/patient/{patientId}")
-public class PatientRestController {
+public class PatientRestController extends BaseRestController {
 
 	private final PatientRepository patientRepository;
 
