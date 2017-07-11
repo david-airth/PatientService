@@ -3,6 +3,7 @@ package com.flex.dhp.patientservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -28,6 +29,8 @@ public class CarecardRestController {
     @RequestMapping(method = RequestMethod.GET)
     Collection<Carecard> getCarecards(@PathVariable long patientId) {
 
+        Assert.isTrue(patientId > 0, "PatientID is required");
+
         Patient patient = this.validatePatient(patientId);
 
         return this.carecardRepository.findByPatientId(patientId);
@@ -37,12 +40,18 @@ public class CarecardRestController {
     @RequestMapping(method = RequestMethod.GET, value = "/{carecardId}")
     Carecard get(@PathVariable long patientId, @PathVariable Long carecardId) {
 
+        Assert.isTrue(patientId > 0, "PatientID is required");
+        Assert.isTrue(carecardId > 0, "careCardId is required");
+
         this.validatePatient(patientId);
         return this.validateCarecard(carecardId);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/{carecardId}")
     ResponseEntity<?> update(@PathVariable Long carecardId, @RequestBody Carecard carecard) {
+
+        Assert.isTrue(carecardId > 0, "careCardId is required");
+        Assert.notNull(carecard, "careCard is required");
 
         Carecard currentCarecard = this.validateCarecard(carecardId);
 
@@ -55,6 +64,10 @@ public class CarecardRestController {
 
     @RequestMapping(method = RequestMethod.POST)
     ResponseEntity<?> add(@PathVariable long patientId, @RequestBody Carecard carecard) {
+
+        Assert.isTrue(patientId > 0, "PatientID is required");
+        Assert.notNull(carecard, "careCard is required");
+
         Patient patient = this.validatePatient(patientId);
 
         Carecard result = carecardRepository.save(new Carecard(patient, carecard.name));
@@ -66,8 +79,10 @@ public class CarecardRestController {
         return ResponseEntity.created(location).build();
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
+    @RequestMapping(method = RequestMethod.DELETE, value = "/{carecardId}")
     ResponseEntity<?> delete(@PathVariable long carecardId) {
+
+        Assert.isTrue(carecardId > 0, "careCardId is required");
 
         carecardRepository.delete(carecardId);
 

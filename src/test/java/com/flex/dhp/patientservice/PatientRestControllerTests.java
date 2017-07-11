@@ -39,7 +39,7 @@ public class PatientRestControllerTests extends BaseRestControllerTests {
     }
 
     @Test
-    public void readSinglePatient() throws Exception {
+    public void getSinglePatient() throws Exception {
         mockMvc.perform(get("/patient/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))

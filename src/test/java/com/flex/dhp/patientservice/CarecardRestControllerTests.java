@@ -8,6 +8,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,7 +28,7 @@ public class CarecardRestControllerTests extends BaseRestControllerTests {
     }
 
     @Test
-    public void readSingleCarecard() throws Exception {
+    public void getSingleCarecard() throws Exception {
         mockMvc.perform(get("/carecards/" + this.patient.getId() + "/" + this.carecardList.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
@@ -36,13 +37,25 @@ public class CarecardRestControllerTests extends BaseRestControllerTests {
     }
 
     @Test
-    public void readCarecards() throws Exception {
+    public void getPatientCarecards() throws Exception {
         mockMvc.perform(get("/carecards/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(this.carecardList.get(0).getId().intValue())))
                 .andExpect(jsonPath("$[1].id", is(this.carecardList.get(1).getId().intValue())));
+    }
+
+    @Test
+    public void deleteCarecard() throws Exception {
+        mockMvc.perform(delete("/carecards/" + this.patient.getId() + "/" + this.carecardList.get(0).getId()))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/carecards/" + this.patient.getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(contentType))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id", is(this.carecardList.get(1).getId().intValue())));
     }
 
     @Test

@@ -5,12 +5,11 @@ package com.flex.dhp.patientservice;
  */
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import java.net.URI;
-import java.util.Collection;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/patient/{patientId}")
@@ -25,6 +24,9 @@ public class PatientRestController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	Patient getPatient(@PathVariable long patientId) {
+
+		Assert.isTrue(patientId > 0, "PatientId is required");
+
 		this.validatePatient(patientId);
 		return this.patientRepository.findOne(patientId);
 	}
