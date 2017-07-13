@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 /**
  * Created by david.airth on 7/11/17.
  */
-public class BaseRestControllerTests {
+public abstract class AbstractRestControllerTests {
     protected MediaType contentType = new MediaType(MediaType.APPLICATION_JSON.getType(),
             MediaType.APPLICATION_JSON.getSubtype(),
             Charset.forName("utf8"));

@@ -1,7 +1,7 @@
 package com.flex.dhp.services.careplan;
 
 import com.flex.dhp.services.patient.*;
-import com.flex.dhp.services.BaseRestController;
+import com.flex.dhp.services.AbstractRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.Collection;
  */
 @RestController
 @RequestMapping("/careplans/{patientId}")
-public class CareplanRestController extends BaseRestController {
+public class CareplanRestController extends AbstractRestController {
     private final PatientRepository patientRepository;
 
     private final CareplanRepository careplanRepository;

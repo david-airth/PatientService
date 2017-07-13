@@ -4,7 +4,7 @@ package com.flex.dhp.services.patient;
  * Created by david.airth on 7/10/17.
  */
 
-import com.flex.dhp.services.BaseRestController;
+import com.flex.dhp.services.AbstractRestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/patient/{patientId}")
-public class PatientRestController extends BaseRestController {
+public class PatientRestController extends AbstractRestController {
 
 	private final PatientRepository patientRepository;
 

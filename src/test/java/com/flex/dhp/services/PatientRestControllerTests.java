@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class PatientRestControllerTests extends BaseRestControllerTests {
+public class PatientRestControllerTests extends AbstractRestControllerTests {
 
     @Test
     public void patientNotFound() throws Exception {

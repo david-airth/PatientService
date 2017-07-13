@@ -20,17 +20,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class CareplanRestControllerTests extends BaseRestControllerTests {
+public class CareplanRestControllerTests extends AbstractRestControllerTests {
 
     @Test
     public void carecardNotFound() throws Exception {
-        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/999999"))
+        mockMvc.perform(get("/careplans/" + this.patient.getId() + "/999999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void getSingleCarecard() throws Exception {
-        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
+        mockMvc.perform(get("/careplans/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(this.careplanList.get(0).getId().intValue())))
@@ -39,7 +39,7 @@ public class CareplanRestControllerTests extends BaseRestControllerTests {
 
     @Test
     public void getPatientCarecards() throws Exception {
-        mockMvc.perform(get("/carecards/" + this.patient.getId()))
+        mockMvc.perform(get("/careplans/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -49,10 +49,10 @@ public class CareplanRestControllerTests extends BaseRestControllerTests {
 
     @Test
     public void deleteCarecard() throws Exception {
-        mockMvc.perform(delete("/carecards/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
+        mockMvc.perform(delete("/careplans/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/carecards/" + this.patient.getId()))
+        mockMvc.perform(get("/careplans/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -62,9 +62,9 @@ public class CareplanRestControllerTests extends BaseRestControllerTests {
     @Test
     public void createCarecard() throws Exception {
 
-        String carecardJson = json(new Careplan(this.patient, "A new CareCard"));
+        String carecardJson = json(new Careplan(this.patient, "A new care plan"));
 
-        String urlTemplate = String.format("/carecards/%s", this.patient.getId());
+        String urlTemplate = String.format("/careplans/%s", this.patient.getId());
 
         this.mockMvc.perform(post(urlTemplate)
                 .contentType(contentType)
