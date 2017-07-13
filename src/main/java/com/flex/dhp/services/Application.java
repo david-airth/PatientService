@@ -1,7 +1,7 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.carecard.Carecard;
-import com.flex.dhp.services.carecard.CarecardRepository;
+import com.flex.dhp.services.careplan.Careplan;
+import com.flex.dhp.services.careplan.CareplanRepository;
 import com.flex.dhp.services.patient.Patient;
 import com.flex.dhp.services.patient.PatientRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -20,15 +20,15 @@ public class Application {
 
 	@Bean
 	CommandLineRunner init(PatientRepository patientRepository,
-						   CarecardRepository carecardRepository) {
+						   CareplanRepository careplanRepository) {
 		return (evt) -> Arrays.asList(
 				"Joe:Smith,Jan:Jones,Bob:Adams,Janet:Lee,Richard:Rho,Don:Fisher,Shirley:Pollack,Susan:Long".split(","))
 				.forEach(
 						a -> {
 							String name[] = a.split(":");
 							Patient patient = patientRepository.save(new Patient(name[0], name[1]));
-							carecardRepository.save(new Carecard(patient,"Care Card 1"));
-							carecardRepository.save(new Carecard(patient,"Care Card 2"));
+							careplanRepository.save(new Careplan(patient, "Care Plan 1"));
+							careplanRepository.save(new Careplan(patient, "Care Plan 2"));
 						});
 	}
 }

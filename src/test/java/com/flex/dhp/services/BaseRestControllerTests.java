@@ -1,7 +1,7 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.carecard.Carecard;
-import com.flex.dhp.services.carecard.CarecardRepository;
+import com.flex.dhp.services.careplan.Careplan;
+import com.flex.dhp.services.careplan.CareplanRepository;
 import com.flex.dhp.services.patient.Patient;
 import com.flex.dhp.services.patient.PatientRepository;
 import org.junit.Before;
@@ -39,7 +39,7 @@ public class BaseRestControllerTests {
 
     protected Patient patient;
 
-    protected List<Carecard> carecardList = new ArrayList<>();
+    protected List<Careplan> careplanList = new ArrayList<>();
 
     @Autowired
     protected PatientRepository patientRepository;
@@ -48,7 +48,7 @@ public class BaseRestControllerTests {
     protected WebApplicationContext webApplicationContext;
 
     @Autowired
-    protected CarecardRepository cardcareRepository;
+    protected CareplanRepository cardcareRepository;
 
     @Autowired
     protected void setConverters(HttpMessageConverter<?>[] converters) {
@@ -70,8 +70,8 @@ public class BaseRestControllerTests {
         this.patientRepository.deleteAllInBatch();
 
         this.patient = patientRepository.save(new Patient(firstName, lastName));
-        this.carecardList.add(cardcareRepository.save(new Carecard(patient, "Care Card 1")));
-        this.carecardList.add(cardcareRepository.save(new Carecard(patient, "Care Card 2")));
+        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Card 1")));
+        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Card 2")));
     }
 
     protected String json(Object o) throws IOException {

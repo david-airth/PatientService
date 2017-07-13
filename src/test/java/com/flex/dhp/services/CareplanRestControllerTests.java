@@ -1,6 +1,6 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.carecard.Carecard;
+import com.flex.dhp.services.careplan.Careplan;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-public class CarecardRestControllerTests extends BaseRestControllerTests {
+public class CareplanRestControllerTests extends BaseRestControllerTests {
 
     @Test
     public void carecardNotFound() throws Exception {
@@ -30,11 +30,11 @@ public class CarecardRestControllerTests extends BaseRestControllerTests {
 
     @Test
     public void getSingleCarecard() throws Exception {
-        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/" + this.carecardList.get(0).getId()))
+        mockMvc.perform(get("/carecards/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$.id", is(this.carecardList.get(0).getId().intValue())))
-                .andExpect(jsonPath("$.name", is(this.carecardList.get(0).getName())));
+                .andExpect(jsonPath("$.id", is(this.careplanList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$.name", is(this.careplanList.get(0).getName())));
     }
 
     @Test
@@ -43,26 +43,26 @@ public class CarecardRestControllerTests extends BaseRestControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].id", is(this.carecardList.get(0).getId().intValue())))
-                .andExpect(jsonPath("$[1].id", is(this.carecardList.get(1).getId().intValue())));
+                .andExpect(jsonPath("$[0].id", is(this.careplanList.get(0).getId().intValue())))
+                .andExpect(jsonPath("$[1].id", is(this.careplanList.get(1).getId().intValue())));
     }
 
     @Test
     public void deleteCarecard() throws Exception {
-        mockMvc.perform(delete("/carecards/" + this.patient.getId() + "/" + this.carecardList.get(0).getId()))
+        mockMvc.perform(delete("/carecards/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
                 .andExpect(status().isNoContent());
 
         mockMvc.perform(get("/carecards/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].id", is(this.carecardList.get(1).getId().intValue())));
+                .andExpect(jsonPath("$[0].id", is(this.careplanList.get(1).getId().intValue())));
     }
 
     @Test
     public void createCarecard() throws Exception {
 
-        String carecardJson = json(new Carecard(this.patient, "A new CareCard"));
+        String carecardJson = json(new Careplan(this.patient, "A new CareCard"));
 
         String urlTemplate = String.format("/carecards/%s", this.patient.getId());
 

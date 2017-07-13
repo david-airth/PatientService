@@ -1,4 +1,4 @@
-package com.flex.dhp.services.carecard;
+package com.flex.dhp.services.careplan;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.flex.dhp.services.patient.Patient;
@@ -10,8 +10,8 @@ import javax.persistence.*;
  * Created by david.airth on 7/9/17.
  */
 @Entity
-public class Carecard {
-    @Id
+public class Careplan {
+	@Id
 	@GeneratedValue
 	private Long id;
 
@@ -22,12 +22,12 @@ public class Carecard {
 	@ManyToOne
 	private Patient patient;
 
-	public Carecard(Patient patient, String name) {
+	public Careplan(Patient patient, String name) {
 		this.patient = patient;
 		this.name = name;
 	}
 
-	Carecard() { // jpa only
+	Careplan() { // jpa only
 	}
 
 	public Long getId() {

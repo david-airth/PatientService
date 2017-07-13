@@ -1,6 +1,6 @@
 package com.flex.dhp.services.patient;
 
-import com.flex.dhp.services.carecard.Carecard;
+import com.flex.dhp.services.careplan.Careplan;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,7 +22,7 @@ public class Patient {
     private String lastname;
 
     @OneToMany(mappedBy = "patient")
-    private Set<Carecard> carecards = new HashSet<>();
+    private Set<Careplan> careplans = new HashSet<>();
 
     public Patient(String firstname, String lastname) {
         this.lastname = lastname;
@@ -44,8 +44,8 @@ public class Patient {
 		return lastname;
 	}
 
-    public Set<Carecard> getCarecards() {
-        return carecards;
+    public Set<Careplan> getCareplans() {
+        return careplans;
     }
 
 }
