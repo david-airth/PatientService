@@ -1,5 +1,7 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.assessment.Assessment;
+import com.flex.dhp.services.assessment.AssessmentRepository;
 import com.flex.dhp.services.careplan.Careplan;
 import com.flex.dhp.services.careplan.CareplanRepository;
 import com.flex.dhp.services.patient.Patient;
@@ -20,15 +22,24 @@ public class Application {
 
 	@Bean
 	CommandLineRunner init(PatientRepository patientRepository,
-						   CareplanRepository careplanRepository) {
+						   CareplanRepository careplanRepository,
+						   AssessmentRepository assessmentRepository) {
 		return (evt) -> Arrays.asList(
 				"Joe:Smith,Jan:Jones,Bob:Adams,Janet:Lee,Richard:Rho,Don:Fisher,Shirley:Pollack,Susan:Long".split(","))
 				.forEach(
 						a -> {
 							String name[] = a.split(":");
 							Patient patient = patientRepository.save(new Patient(name[0], name[1]));
-							careplanRepository.save(new Careplan(patient, "Care Plan 1"));
-							careplanRepository.save(new Careplan(patient, "Care Plan 2"));
+							Careplan careplan1 = new Careplan(patient, "Care Plan 1");
+							Careplan careplan2 = new Careplan(patient, "Care Plan 2");
+							careplanRepository.save(careplan1);
+							careplanRepository.save(careplan2);
+
+							assessmentRepository.save(new Assessment(careplan1, "Assessment 1"));
+							assessmentRepository.save(new Assessment(careplan1, "Assessment 2"));
+							assessmentRepository.save(new Assessment(careplan2, "Assessment 1"));
+							assessmentRepository.save(new Assessment(careplan2, "Assessment 2"));
+
 						});
 	}
 }

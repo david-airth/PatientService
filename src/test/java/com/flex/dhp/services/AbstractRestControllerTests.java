@@ -1,7 +1,12 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.assessment.Assessment;
+import com.flex.dhp.services.assessment.AssessmentRepository;
 import com.flex.dhp.services.careplan.Careplan;
 import com.flex.dhp.services.careplan.CareplanRepository;
+import com.flex.dhp.services.intervention.Intervention;
+import com.flex.dhp.services.intervention.InterventionRepository;
+import com.flex.dhp.services.intervention.InterventionType;
 import com.flex.dhp.services.patient.Patient;
 import com.flex.dhp.services.patient.PatientRepository;
 import org.junit.Before;
@@ -40,6 +45,14 @@ public abstract class AbstractRestControllerTests {
     protected Patient patient;
 
     protected List<Careplan> careplanList = new ArrayList<>();
+    protected List<Assessment> assessmentList = new ArrayList<>();
+    protected List<Intervention> interventionList = new ArrayList<>();
+
+    @Autowired
+    protected InterventionRepository interventionRepository;
+
+    @Autowired
+    protected AssessmentRepository assessmentRepository;
 
     @Autowired
     protected PatientRepository patientRepository;
@@ -66,12 +79,25 @@ public abstract class AbstractRestControllerTests {
     public void setup() throws Exception {
         this.mockMvc = webAppContextSetup(webApplicationContext).build();
 
+        this.interventionRepository.deleteAllInBatch();
+        this.assessmentRepository.deleteAllInBatch();
         this.cardcareRepository.deleteAllInBatch();
         this.patientRepository.deleteAllInBatch();
 
         this.patient = patientRepository.save(new Patient(firstName, lastName));
-        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Card 1")));
-        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Card 2")));
+
+        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Plan 1")));
+        this.careplanList.add(cardcareRepository.save(new Careplan(patient, "Care Plan 2")));
+
+        this.assessmentList.add(assessmentRepository.save(new Assessment(this.careplanList.get(0), "Assessment 1")));
+        this.assessmentList.add(assessmentRepository.save(new Assessment(this.careplanList.get(0), "Assessment 2")));
+        this.assessmentList.add(assessmentRepository.save(new Assessment(this.careplanList.get(1), "Assessment 1")));
+        this.assessmentList.add(assessmentRepository.save(new Assessment(this.careplanList.get(1), "Assessment 2")));
+
+        this.interventionList.add(interventionRepository.save(new Intervention(this.careplanList.get(0), InterventionType.Medication, "Intervention 1")));
+        this.interventionList.add(interventionRepository.save(new Intervention(this.careplanList.get(0), InterventionType.Medication, "Intervention 2")));
+        this.interventionList.add(interventionRepository.save(new Intervention(this.careplanList.get(1), InterventionType.Medication, "Intervention 1")));
+        this.interventionList.add(interventionRepository.save(new Intervention(this.careplanList.get(1), InterventionType.Medication, "Intervention 2")));
     }
 
     protected String json(Object o) throws IOException {

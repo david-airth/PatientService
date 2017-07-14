@@ -1,5 +1,6 @@
 package com.flex.dhp.services.patient;
 
+import com.flex.dhp.services.AbstractEntity;
 import com.flex.dhp.services.careplan.Careplan;
 
 import javax.persistence.*;
@@ -10,8 +11,8 @@ import java.util.Set;
  * Created by david.airth on 7/9/17.
  */
 @Entity
-public class Patient {
-	@Id
+public class Patient extends AbstractEntity {
+    @Id
 	@GeneratedValue
 	private Long id;
 
