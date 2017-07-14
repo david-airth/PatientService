@@ -4,6 +4,9 @@ import com.flex.dhp.services.assessment.Assessment;
 import com.flex.dhp.services.assessment.AssessmentRepository;
 import com.flex.dhp.services.careplan.Careplan;
 import com.flex.dhp.services.careplan.CareplanRepository;
+import com.flex.dhp.services.intervention.Intervention;
+import com.flex.dhp.services.intervention.InterventionRepository;
+import com.flex.dhp.services.intervention.InterventionType;
 import com.flex.dhp.services.patient.Patient;
 import com.flex.dhp.services.patient.PatientRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -22,14 +25,16 @@ public class Application {
 
 	@Bean
 	CommandLineRunner init(PatientRepository patientRepository,
-						   CareplanRepository careplanRepository,
-						   AssessmentRepository assessmentRepository) {
-		return (evt) -> Arrays.asList(
+                           CareplanRepository careplanRepository,
+                           AssessmentRepository assessmentRepository,
+                           InterventionRepository interventionRepository) {
+        return (evt) -> Arrays.asList(
 				"Joe:Smith,Jan:Jones,Bob:Adams,Janet:Lee,Richard:Rho,Don:Fisher,Shirley:Pollack,Susan:Long".split(","))
 				.forEach(
 						a -> {
 							String name[] = a.split(":");
 							Patient patient = patientRepository.save(new Patient(name[0], name[1]));
+
 							Careplan careplan1 = new Careplan(patient, "Care Plan 1");
 							Careplan careplan2 = new Careplan(patient, "Care Plan 2");
 							careplanRepository.save(careplan1);
@@ -40,6 +45,10 @@ public class Application {
 							assessmentRepository.save(new Assessment(careplan2, "Assessment 1"));
 							assessmentRepository.save(new Assessment(careplan2, "Assessment 2"));
 
-						});
+                            interventionRepository.save(new Intervention(careplan1, InterventionType.Medication, "Intervention 1"));
+                            interventionRepository.save(new Intervention(careplan1, InterventionType.Medication, "Intervention 2"));
+                            interventionRepository.save(new Intervention(careplan2, InterventionType.Medication, "Intervention 1"));
+                            interventionRepository.save(new Intervention(careplan2, InterventionType.Medication, "Intervention 2"));
+                        });
 	}
 }
