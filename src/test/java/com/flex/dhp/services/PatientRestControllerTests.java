@@ -20,13 +20,13 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
 
     @Test
     public void patientNotFound() throws Exception {
-        mockMvc.perform(get("/patient/99999/"))
+        mockMvc.perform(get("/patients/99999/"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void getSinglePatient() throws Exception {
-        mockMvc.perform(get("/patient/" + this.patient.getId()))
+        mockMvc.perform(get("/patients/" + this.patient.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(this.patient.getId().intValue())))

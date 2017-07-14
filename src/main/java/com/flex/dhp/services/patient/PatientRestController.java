@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/patient/{patientId}")
+@RequestMapping("/patients/{patientId}")
 public class PatientRestController extends AbstractRestController {
 
 	private final PatientRepository patientRepository;
