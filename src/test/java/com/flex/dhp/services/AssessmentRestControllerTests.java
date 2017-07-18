@@ -20,15 +20,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class AssessmentRestControllerTests extends AbstractRestControllerTests {
 
+    private String baseUrl = "/patients/%s/assessments";
+
     @Test
     public void assessmentNotFound() throws Exception {
-        mockMvc.perform(get("/assessments/" + this.careplanList.get(0).getId() + "/999999"))
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId()) + "/999999"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     public void getSingleAssessment() throws Exception {
-        mockMvc.perform(get("/assessments/" + this.careplanList.get(0).getId() + "/" + this.assessmentList.get(0).getId()))
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId()) + "/" + this.assessmentList.get(0).getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(this.assessmentList.get(0).getId().intValue())))
@@ -36,33 +38,37 @@ public class AssessmentRestControllerTests extends AbstractRestControllerTests {
     }
 
     @Test
-    public void getCareplanAssessments() throws Exception {
-        mockMvc.perform(get("/assessments/" + this.careplanList.get(0).getId()))
+    public void getPatientAssessments() throws Exception {
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(4)))
                 .andExpect(jsonPath("$[0].id", is(this.assessmentList.get(0).getId().intValue())))
                 .andExpect(jsonPath("$[1].id", is(this.assessmentList.get(1).getId().intValue())));
     }
 
     @Test
     public void deleteAssessment() throws Exception {
-        mockMvc.perform(delete("/assessments/" + this.careplanList.get(0).getId() + "/" + this.assessmentList.get(0).getId()))
+        mockMvc.perform(delete(String.format(baseUrl, this.patient.getId()) + "/" + this.assessmentList.get(0).getId()))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/assessments/" + this.careplanList.get(0).getId()))
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$[0].id", is(this.assessmentList.get(1).getId().intValue())));
     }
 
     @Test
     public void createAssessment() throws Exception {
 
-        String assessmentJson = json(new Assessment(this.careplanList.get(0), "A new assessment"));
+        Assessment a = new Assessment(this.careplanList.get(0), "A new assessment");
+        a.setInstructions("Instructions are long");
+        a.setText("More text");
 
-        String urlTemplate = String.format("/assessments/%s", this.careplanList.get(0).getId());
+        String assessmentJson = json(a);
+
+        String urlTemplate = String.format(baseUrl, this.patient.getId());
 
         this.mockMvc.perform(post(urlTemplate)
                 .contentType(contentType)
@@ -72,6 +78,6 @@ public class AssessmentRestControllerTests extends AbstractRestControllerTests {
         mockMvc.perform(get(urlTemplate))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
-                .andExpect(jsonPath("$", hasSize(3)));
+                .andExpect(jsonPath("$", hasSize(5)));
     }
 }

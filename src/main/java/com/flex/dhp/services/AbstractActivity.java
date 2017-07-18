@@ -1,6 +1,6 @@
 package com.flex.dhp.services;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.flex.dhp.services.careplan.Careplan;
 import org.springframework.util.Assert;
 
@@ -21,6 +21,8 @@ public class AbstractActivity extends AbstractEntity {
     private String text;
     @Column
     private String instructions;
+    @Column(name = "careplan_id", updatable = false, insertable = false)
+    private long planId;
 
     public String getTitle() {
         return title;
@@ -46,16 +48,22 @@ public class AbstractActivity extends AbstractEntity {
         this.instructions = instructions;
     }
 
-    public AbstractActivity(Careplan careplan, String title) {
-        Assert.notNull(careplan, "careplan is required");
-        Assert.notNull(title, "title is required.");
+    public long getPlanId() {
+        return planId;
+    }
+    //public void setPlanid(long planId) { this.planId = planId;}
 
+    public AbstractActivity(Careplan careplan, String title) {
+        Assert.notNull(careplan, "Careplan is required");
+        Assert.notNull(title, "Title is required.");
+
+        this.planId = careplan.getId();
         this.careplan = careplan;
         this.title = title;
     }
 
-    @JsonIgnore
     @ManyToOne
+    @JsonBackReference
     private Careplan careplan;
 
     public Careplan getCareplan() {
