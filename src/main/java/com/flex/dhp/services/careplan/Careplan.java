@@ -1,12 +1,16 @@
 package com.flex.dhp.services.careplan;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.flex.dhp.services.AbstractEntity;
 import com.flex.dhp.services.assessment.Assessment;
 import com.flex.dhp.services.intervention.Intervention;
 import com.flex.dhp.services.patient.Patient;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,6 +39,7 @@ public class Careplan extends AbstractEntity {
 	}
 
 	@OneToMany(mappedBy = "careplan")
+	@JsonManagedReference
 	private Set<Assessment> assessments = new HashSet<>();
 
 	public Set<Assessment> getAssessments() {
@@ -42,6 +47,7 @@ public class Careplan extends AbstractEntity {
 	}
 
 	@OneToMany(mappedBy = "careplan")
+	@JsonManagedReference
 	private Set<Intervention> interventions = new HashSet<>();
 
 	public Set<Intervention> getInterventions() {

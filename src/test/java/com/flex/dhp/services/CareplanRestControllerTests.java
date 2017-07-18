@@ -9,9 +9,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -22,15 +20,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class CareplanRestControllerTests extends AbstractRestControllerTests {
 
+    private String baseUrl = "/patients/%s/careplans";
     @Test
-    public void carecardNotFound() throws Exception {
-        mockMvc.perform(get("/careplans/" + this.patient.getId() + "/999999"))
+    public void careplanNotFound() throws Exception {
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId()) + "/3333333"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void getSingleCarecard() throws Exception {
-        mockMvc.perform(get("/careplans/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
+    public void getSingleCareplan() throws Exception {
+        String url = String.format(baseUrl, this.patient.getId()) + "/" + this.careplanList.get(0).getId();
+        mockMvc.perform(get(url))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$.id", is(this.careplanList.get(0).getId().intValue())))
@@ -38,8 +38,8 @@ public class CareplanRestControllerTests extends AbstractRestControllerTests {
     }
 
     @Test
-    public void getPatientCarecards() throws Exception {
-        mockMvc.perform(get("/careplans/" + this.patient.getId()))
+    public void getPatientPlans() throws Exception {
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -48,11 +48,13 @@ public class CareplanRestControllerTests extends AbstractRestControllerTests {
     }
 
     @Test
-    public void deleteCarecard() throws Exception {
-        mockMvc.perform(delete("/careplans/" + this.patient.getId() + "/" + this.careplanList.get(0).getId()))
+    public void deleteCareplan() throws Exception {
+        String url = String.format(baseUrl, this.patient.getId()) + "/" + this.careplanList.get(0).getId();
+
+        mockMvc.perform(delete(url))
                 .andExpect(status().isNoContent());
 
-        mockMvc.perform(get("/careplans/" + this.patient.getId()))
+        mockMvc.perform(get(String.format(baseUrl, this.patient.getId())))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(1)))
@@ -60,11 +62,11 @@ public class CareplanRestControllerTests extends AbstractRestControllerTests {
     }
 
     @Test
-    public void createCarecard() throws Exception {
+    public void createCareplan() throws Exception {
 
         String carecardJson = json(new Careplan(this.patient, "A new care plan"));
 
-        String urlTemplate = String.format("/careplans/%s", this.patient.getId());
+        String urlTemplate = String.format(baseUrl, this.patient.getId());
 
         this.mockMvc.perform(post(urlTemplate)
                 .contentType(contentType)

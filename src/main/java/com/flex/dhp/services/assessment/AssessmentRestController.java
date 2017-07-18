@@ -1,25 +1,23 @@
 package com.flex.dhp.services.assessment;
 
 import com.flex.dhp.services.AbstractRestController;
+import com.flex.dhp.services.EntityNotFoundException;
 import com.flex.dhp.services.careplan.Careplan;
-import com.flex.dhp.services.careplan.CareplanNotFoundException;
 import com.flex.dhp.services.careplan.CareplanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import javax.transaction.Transactional;
 import java.util.Collection;
 
 /**
  * Created by david.airth on 7/11/17.
  */
 @RestController
-@RequestMapping("/assessments/{careplanId}")
-public class AssessmentRestController extends AbstractRestController {
+@RequestMapping("/patients/{patientId}/assessments")
+public class AssessmentRestController extends AbstractRestController<Assessment> {
 
     private final CareplanRepository careplanRepository;
     private final AssessmentRepository assessmentRepository;
@@ -30,50 +28,24 @@ public class AssessmentRestController extends AbstractRestController {
         this.assessmentRepository = assessmentRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    Collection<Assessment> getAssessments(@PathVariable long careplanId) {
-
-        Assert.isTrue(careplanId > 0, "careplanId is required");
-
-        Careplan careplan = this.validateCareplan(careplanId);
-
-        return this.assessmentRepository.findByCareplanId(careplanId);
-    }
-
-
-    @RequestMapping(method = RequestMethod.GET, value = "/{assessmentId}")
-    Assessment get(@PathVariable long careplanId, @PathVariable Long assessmentId) {
-
-        Assert.isTrue(careplanId > 0, "CareplanId is required");
-        Assert.isTrue(assessmentId > 0, "assessmentId is required");
-
-        this.validateCareplan(careplanId);
+    @Override
+    protected Assessment doGet(Long patientId, long assessmentId) {
         return this.validateAssessment(assessmentId);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{assessmentId}")
-    ResponseEntity<?> update(@PathVariable Long assessmentId, @RequestBody Assessment assessment) {
+    @Override
+    protected Collection<Assessment> doGetList(Long patientId) {
+        Assert.notNull(patientId, "patientId is required");
 
-        Assert.isTrue(assessmentId > 0, "assessmentId is required");
-        Assert.notNull(assessment, "assessment is required");
-
-        Assessment currentAssessment = this.validateAssessment(assessmentId);
-
-        //TODO: currently NoOp as nothing can be changed
-        //currentAssessment.setName(assessment.getName());
-
-        this.assessmentRepository.save(currentAssessment);
-
-        return new ResponseEntity<>(currentAssessment, HttpStatus.OK);
+        return assessmentRepository.findByPatientId(patientId.longValue());
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> add(@PathVariable long careplanId, @RequestBody Assessment assessment) {
+    @Override
+    protected Assessment doCreate(Long patientId, Assessment assessment) {
+        Assert.notNull(patientId, "PatientId is required");
+        Assert.notNull(assessment, "Assessment is required");
 
-        Assert.isTrue(careplanId > 0, "careplanId is required");
-        Assert.notNull(assessment, "assessment is required");
-
-        Careplan careplan = this.validateCareplan(careplanId);
+        Careplan careplan = this.validateCareplan(assessment.getPlanId());
 
         Assessment newA = new Assessment(careplan, assessment.getTitle());
         newA.setText(assessment.getTitle());
@@ -81,29 +53,37 @@ public class AssessmentRestController extends AbstractRestController {
 
         Assessment result = assessmentRepository.save(newA);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location).build();
+        return result;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{assessmentId}")
-    ResponseEntity<?> delete(@PathVariable long assessmentId) {
+    @Override
+    protected Assessment doUpdate(Long patientId, Assessment assessment) {
+        Assert.notNull(patientId, "PatientId is required");
+        Assessment currentAssessment = this.validateAssessment(assessment.getId());
 
-        Assert.isTrue(assessmentId > 0, "assessmentId is required");
+        currentAssessment.setTitle(assessment.getTitle());
+        currentAssessment.setText(assessment.getText());
+        currentAssessment.setInstructions(assessment.getInstructions());
 
-        validateAssessment(assessmentId);
+        return this.assessmentRepository.save(currentAssessment);
+    }
 
-        assessmentRepository.delete(assessmentId);
+    @Transactional
+    @Override
+    protected void doDelete(Long patientId, long id) {
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Assert.notNull(patientId, "patientId is required");
+
+        validateAssessment(id);
+
+        assessmentRepository.delete(id);
+
     }
 
     private Careplan validateCareplan(long careplanId) {
         Careplan careplan = this.careplanRepository.findOne(careplanId);
         if (careplan == null)
-            throw new CareplanNotFoundException(careplanId);
+            throw new EntityNotFoundException("Careplan", careplanId);
         else
             return careplan;
     }
@@ -111,7 +91,7 @@ public class AssessmentRestController extends AbstractRestController {
     private Assessment validateAssessment(long assessmentId) {
         Assessment assessment = this.assessmentRepository.findOne(assessmentId);
         if (assessment == null)
-            throw new AssessmentNotFoundException(assessmentId);
+            throw new EntityNotFoundException("Assessment", assessmentId);
         else
             return assessment;
     }

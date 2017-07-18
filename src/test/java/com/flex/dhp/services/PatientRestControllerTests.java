@@ -1,5 +1,7 @@
 package com.flex.dhp.services;
 
+import com.flex.dhp.services.patient.Patient;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -7,7 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -32,5 +37,38 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
                 .andExpect(jsonPath("$.id", is(this.patient.getId().intValue())))
                 .andExpect(jsonPath("$.firstname", is(this.patient.getFirstname())))
                 .andExpect(jsonPath("$.lastname", is(this.patient.getLastname())));
+    }
+
+    @Test
+    public void createPatient() throws Exception {
+
+        String patientJson = json(new Patient("John", "Smith"));
+
+        String urlTemplate = "/patients";
+
+        this.mockMvc.perform(post(urlTemplate)
+                .contentType(contentType)
+                .content(patientJson))
+                .andExpect(jsonPath("$.id", not(0)))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    public void updatePatient() throws Exception {
+
+        String newFirstName = "Joan";
+        Assert.assertEquals(this.patient.getFirstname(), firstName);
+        Assert.assertNotEquals(this.patient.getFirstname(), newFirstName);
+        this.patient.setFirstname(newFirstName);
+
+        String patientJson = json(this.patient);
+
+        String urlTemplate = String.format("/patients/%s", this.patient.getId());
+
+        this.mockMvc.perform(put(urlTemplate)
+                .contentType(contentType)
+                .content(patientJson))
+                .andExpect(jsonPath("$.firstname", is(newFirstName)))
+                .andExpect(status().isOk());
     }
 }

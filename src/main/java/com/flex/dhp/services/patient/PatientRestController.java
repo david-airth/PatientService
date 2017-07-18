@@ -5,16 +5,18 @@ package com.flex.dhp.services.patient;
  */
 
 import com.flex.dhp.services.AbstractRestController;
+import com.flex.dhp.services.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.xml.ws.http.HTTPException;
+import java.util.Collection;
+
 @RestController
-@RequestMapping("/patients/{patientId}")
-public class PatientRestController extends AbstractRestController {
+@RequestMapping("/patients")
+public class PatientRestController extends AbstractRestController<Patient> {
 
 	private final PatientRepository patientRepository;
 
@@ -23,19 +25,47 @@ public class PatientRestController extends AbstractRestController {
 		this.patientRepository = patientRepository;
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
-	Patient getPatient(@PathVariable long patientId) {
-
-		Assert.isTrue(patientId > 0, "PatientId is required");
-
-		this.validatePatient(patientId);
-		return this.patientRepository.findOne(patientId);
+	@Override
+	protected Patient doGet(Long patientId, long id) {
+		Assert.notNull(id, "PatientId is required");
+		return validatePatient(id);
 	}
 
+	@Override
+	protected Collection<Patient> doGetList(Long patientId) {
+		throw new HTTPException(405);
+		//return null;
+	}
+
+	@Override
+	protected Patient doCreate(Long patientId, Patient patient) {
+		Patient newPatient = this.patientRepository.save(patient);
+		return newPatient;
+	}
+
+	@Override
+	protected Patient doUpdate(Long patientId, Patient patient) {
+
+		Assert.notNull(patient.getId(), "PatientID is required");
+
+		Patient updatedPatient = validatePatient(patient.getId());
+
+		updatedPatient.setFirstname(patient.getFirstname());
+		updatedPatient.setLastname(patient.getLastname());
+
+		return this.patientRepository.save(updatedPatient);
+	}
+
+	@Override
+	protected void doDelete(Long patientId, long id) {
+
+		throw new HTTPException(405);
+
+	}
 	private Patient validatePatient(long patientId) {
 		Patient patient = this.patientRepository.findOne(patientId);
 		if (patient == null)
-			throw new PatientNotFoundException(patientId);
+			throw new EntityNotFoundException("Patient", patientId);
 		else
 			return patient;
 	}

@@ -1,25 +1,23 @@
 package com.flex.dhp.services.intervention;
 
 import com.flex.dhp.services.AbstractRestController;
+import com.flex.dhp.services.EntityNotFoundException;
 import com.flex.dhp.services.careplan.Careplan;
-import com.flex.dhp.services.careplan.CareplanNotFoundException;
 import com.flex.dhp.services.careplan.CareplanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.net.URI;
+import javax.transaction.Transactional;
 import java.util.Collection;
 
 /**
  * Created by david.airth on 7/11/17.
  */
 @RestController
-@RequestMapping("/interventions/{careplanId}")
-public class InterventionRestController extends AbstractRestController {
+@RequestMapping("/patients/{patientId}/interventions")
+public class InterventionRestController extends AbstractRestController<Intervention> {
 
     private final CareplanRepository careplanRepository;
     private final InterventionRepository interventionRepository;
@@ -30,80 +28,64 @@ public class InterventionRestController extends AbstractRestController {
         this.interventionRepository = interventionRepository;
     }
 
-    @RequestMapping(method = RequestMethod.GET)
-    Collection<Intervention> getInterventions(@PathVariable long careplanId) {
-
-        Assert.isTrue(careplanId > 0, "careplanId is required");
-
-        Careplan careplan = this.validateCareplan(careplanId);
-
-        return this.interventionRepository.findByCareplanId(careplanId);
+    @Override
+    protected Intervention doGet(Long patientId, long id) {
+        return this.validateIntervention(id);
     }
 
+    @Override
+    protected Collection<Intervention> doGetList(Long patientId) {
+        Assert.notNull(patientId, "patientId is required");
 
-    @RequestMapping(method = RequestMethod.GET, value = "/{interventionId}")
-    Intervention get(@PathVariable long careplanId, @PathVariable Long interventionId) {
-
-        Assert.isTrue(careplanId > 0, "CareplanId is required");
-        Assert.isTrue(interventionId > 0, "interventionId is required");
-
-        this.validateCareplan(careplanId);
-        return this.validateIntervention(interventionId);
+        return interventionRepository.findByPatientId(patientId.longValue());
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "/{interventionId}")
-    ResponseEntity<?> update(@PathVariable Long interventionId, @RequestBody Intervention intervention) {
+    @Override
+    protected Intervention doCreate(Long patientId, Intervention intervention) {
 
-        Assert.isTrue(interventionId > 0, "interventionId is required");
-        Assert.notNull(intervention, "intervention is required");
+        Assert.notNull(patientId, "PatientId is required");
 
-        Intervention currentIntervention = this.validateIntervention(interventionId);
+        Careplan careplan = this.validateCareplan(intervention.getPlanId());
 
-        //TODO: currently NoOp as nothing can be changed
-        //currentIntervention.setName(intervention.getName());
-
-        this.interventionRepository.save(currentIntervention);
-
-        return new ResponseEntity<>(currentIntervention, HttpStatus.OK);
-    }
-
-    @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<?> add(@PathVariable long careplanId, @RequestBody Intervention intervention) {
-
-        Assert.isTrue(careplanId > 0, "careplanId is required");
-        Assert.notNull(intervention, "intervention is required");
-
-        Careplan careplan = this.validateCareplan(careplanId);
-
-        Intervention newA = new Intervention(careplan, InterventionType.Medication, intervention.getTitle());
+        Intervention newA = new Intervention(careplan, intervention.getType(), intervention.getTitle());
         newA.setText(intervention.getTitle());
         newA.setInstructions(intervention.getInstructions());
 
         Intervention result = interventionRepository.save(newA);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(result.getId()).toUri();
-
-        return ResponseEntity.created(location).build();
+        return result;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "/{interventionId}")
-    ResponseEntity<?> delete(@PathVariable long interventionId) {
+    @Override
+    protected Intervention doUpdate(Long patientId, Intervention intervention) {
+        Assert.notNull(patientId, "PatientId is required");
 
-        Assert.isTrue(interventionId > 0, "interventionId is required");
+        Intervention currentIntervention = this.validateIntervention(intervention.getId());
 
-        validateIntervention(interventionId);
+        currentIntervention.setTitle(intervention.getTitle());
+        currentIntervention.setText(intervention.getText());
+        currentIntervention.setInstructions(intervention.getInstructions());
 
-        interventionRepository.delete(interventionId);
+        return this.interventionRepository.save(currentIntervention);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @Transactional
+    @Override
+    protected void doDelete(Long patientId, long id) {
+
+        Assert.notNull(patientId, "PatientId is required");
+
+        validateIntervention(id);
+
+        interventionRepository.delete(id);
+
     }
 
     private Careplan validateCareplan(long careplanId) {
         Careplan careplan = this.careplanRepository.findOne(careplanId);
         if (careplan == null)
-            throw new CareplanNotFoundException(careplanId);
+            throw new EntityNotFoundException("Careplan", careplanId);
         else
             return careplan;
     }
@@ -111,7 +93,7 @@ public class InterventionRestController extends AbstractRestController {
     private Intervention validateIntervention(long interventionId) {
         Intervention intervention = this.interventionRepository.findOne(interventionId);
         if (intervention == null)
-            throw new InterventionNotFoundException(interventionId);
+            throw new EntityNotFoundException("Intervention", interventionId);
         else
             return intervention;
     }

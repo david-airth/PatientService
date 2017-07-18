@@ -1,4 +1,4 @@
-package com.flex.dhp.services.assessment;
+package com.flex.dhp.services;
 
 import org.springframework.hateoas.VndErrors;
 import org.springframework.http.HttpStatus;
@@ -8,14 +8,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Created by david.airth on 7/11/17.
+ * Created by david.airth on 7/18/17.
  */
 @ControllerAdvice
-public class AssessmentControllerAdvice {
+public class EntityControllerAdvice {
     @ResponseBody
-    @ExceptionHandler(AssessmentNotFoundException.class)
+    @ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    VndErrors assessmentNotFoundExceptionHandler(AssessmentNotFoundException ex) {
+    VndErrors assessmentNotFoundExceptionHandler(EntityNotFoundException ex) {
         return new VndErrors("error", ex.getMessage());
     }
 }
