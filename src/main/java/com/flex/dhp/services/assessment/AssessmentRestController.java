@@ -30,6 +30,7 @@ public class AssessmentRestController extends AbstractRestController<Assessment>
 
     @Override
     protected Assessment doGet(Long patientId, long assessmentId) {
+
         return this.validateAssessment(assessmentId);
     }
 

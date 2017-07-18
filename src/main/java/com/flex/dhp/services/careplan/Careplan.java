@@ -47,7 +47,7 @@ public class Careplan extends AbstractEntity {
 	}
 
 	@OneToMany(mappedBy = "careplan")
-	@JsonManagedReference
+	//@JsonManagedReference
 	private Set<Intervention> interventions = new HashSet<>();
 
 	public Set<Intervention> getInterventions() {

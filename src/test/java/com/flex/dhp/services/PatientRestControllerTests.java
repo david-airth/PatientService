@@ -10,9 +10,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -56,6 +55,7 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
     @Test
     public void updatePatient() throws Exception {
 
+        Assert.assertNull(this.patient.getUpdatedDate());
         String newFirstName = "Joan";
         Assert.assertEquals(this.patient.getFirstname(), firstName);
         Assert.assertNotEquals(this.patient.getFirstname(), newFirstName);
@@ -69,6 +69,7 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
                 .contentType(contentType)
                 .content(patientJson))
                 .andExpect(jsonPath("$.firstname", is(newFirstName)))
+                .andExpect(jsonPath("$.updatedDate", notNullValue()))
                 .andExpect(status().isOk());
     }
 }
