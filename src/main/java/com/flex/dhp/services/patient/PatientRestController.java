@@ -5,6 +5,7 @@ package com.flex.dhp.services.patient;
  */
 
 import com.flex.dhp.services.AbstractRestController;
+import com.flex.dhp.services.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,7 @@ public class PatientRestController extends AbstractRestController<Patient> {
 	private Patient validatePatient(long patientId) {
 		Patient patient = this.patientRepository.findOne(patientId);
 		if (patient == null)
-			throw new PatientNotFoundException(patientId);
+			throw new EntityNotFoundException("Patient", patientId);
 		else
 			return patient;
 	}

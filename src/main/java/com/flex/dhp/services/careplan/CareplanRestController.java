@@ -1,10 +1,10 @@
 package com.flex.dhp.services.careplan;
 
 import com.flex.dhp.services.AbstractRestController;
+import com.flex.dhp.services.EntityNotFoundException;
 import com.flex.dhp.services.assessment.AssessmentRepository;
 import com.flex.dhp.services.intervention.InterventionRepository;
 import com.flex.dhp.services.patient.Patient;
-import com.flex.dhp.services.patient.PatientNotFoundException;
 import com.flex.dhp.services.patient.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
@@ -93,7 +93,7 @@ public class CareplanRestController extends AbstractRestController<Careplan> {
     private Patient validatePatient(long patientId) {
         Patient patient = this.patientRepository.findOne(patientId);
         if (patient == null)
-            throw new PatientNotFoundException(patientId);
+            throw new EntityNotFoundException("Patient", patientId);
         else
             return patient;
     }
@@ -101,7 +101,7 @@ public class CareplanRestController extends AbstractRestController<Careplan> {
     private Careplan validateCareplan(long careplanId) {
         Careplan careplan = this.careplanRepository.findOne(careplanId);
         if (careplan == null)
-            throw new CareplanNotFoundException(careplanId);
+            throw new EntityNotFoundException("Careplan", careplanId);
         else
             return careplan;
     }
