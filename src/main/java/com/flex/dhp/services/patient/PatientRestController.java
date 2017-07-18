@@ -38,13 +38,22 @@ public class PatientRestController extends AbstractRestController<Patient> {
 	}
 
 	@Override
-	protected Patient doCreate(Long patientId, Patient entity) {
-		throw new HTTPException(405);
+	protected Patient doCreate(Long patientId, Patient patient) {
+		Patient newPatient = this.patientRepository.save(patient);
+		return newPatient;
 	}
 
 	@Override
-	protected Patient doUpdate(Long patientId, Patient entity) {
-		throw new HTTPException(405);
+	protected Patient doUpdate(Long patientId, Patient patient) {
+
+		Assert.notNull(patient.getId(), "PatientID is required");
+
+		Patient updatedPatient = validatePatient(patient.getId());
+
+		updatedPatient.setFirstname(patient.getFirstname());
+		updatedPatient.setLastname(patient.getLastname());
+
+		return this.patientRepository.save(updatedPatient);
 	}
 
 	@Override

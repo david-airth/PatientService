@@ -2,7 +2,6 @@ package com.flex.dhp.services;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +25,7 @@ public abstract class AbstractRestController<T> {
 
     protected abstract void doDelete(Long patientId, long id);
 
-    @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET, value = "/{id}")
     T get(@PathVariable(required = false) Long patientId, @PathVariable long id) {
 
         Assert.isTrue(id > 0, "Id is required");
@@ -41,17 +40,17 @@ public abstract class AbstractRestController<T> {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    ResponseEntity<T> add(@PathVariable(required = false) Long patientId, @RequestBody T entity) {
+    ResponseEntity<T> create(@PathVariable(required = false) Long patientId, @RequestBody T entity) {
 
-        Assert.notNull(entity, "Entity to update is required");
+        Assert.notNull(entity, "Entity to create is required");
 
         T createdEntity = doCreate(patientId, entity);
 
         return new ResponseEntity<T>(createdEntity, HttpStatus.CREATED);
     }
 
-    @RequestMapping(method = RequestMethod.PUT)
-    ResponseEntity<T> update(@PathVariable(required = false) Long patientId, @RequestBody T entity) {
+    @RequestMapping(method = RequestMethod.PUT, value = "/{id}")
+    ResponseEntity<T> update(@PathVariable(required = false) Long patientId, @PathVariable long id, @RequestBody T entity) {
 
         Assert.notNull(entity, "Entity to update is required");
 
@@ -60,7 +59,6 @@ public abstract class AbstractRestController<T> {
         return new ResponseEntity<>(updatedEntity, HttpStatus.OK);
     }
 
-    @Transactional
     @RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
     ResponseEntity<?> delete(@PathVariable(required = false) Long patientId, @PathVariable long id) {
 

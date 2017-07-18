@@ -61,8 +61,9 @@ public class AssessmentRestController extends AbstractRestController<Assessment>
         Assert.notNull(patientId, "PatientId is required");
         Assessment currentAssessment = this.validateAssessment(assessment.getId());
 
-        //TODO: currently NoOp as nothing can be changed
-        //currentAssessment.setName(assessment.getName());
+        currentAssessment.setTitle(assessment.getTitle());
+        currentAssessment.setText(assessment.getText());
+        currentAssessment.setInstructions(assessment.getInstructions());
 
         return this.assessmentRepository.save(currentAssessment);
     }

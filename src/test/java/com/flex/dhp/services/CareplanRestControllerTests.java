@@ -9,9 +9,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
@@ -64,7 +62,7 @@ public class CareplanRestControllerTests extends AbstractRestControllerTests {
     }
 
     @Test
-    public void createCarecard() throws Exception {
+    public void createCareplan() throws Exception {
 
         String carecardJson = json(new Careplan(this.patient, "A new care plan"));
 

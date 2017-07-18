@@ -2,6 +2,7 @@ package com.flex.dhp.services;
 
 import com.flex.dhp.services.intervention.Intervention;
 import com.flex.dhp.services.intervention.InterventionType;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -76,5 +77,25 @@ public class InterventionRestControllerTests extends AbstractRestControllerTests
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(contentType))
                 .andExpect(jsonPath("$", hasSize(5)));
+    }
+
+    @Test
+    public void updateIntervention() throws Exception {
+
+        Intervention a = this.interventionList.get(0);
+        String oldTitle = a.getTitle();
+        String newTitle = "A new intervention name";
+        Assert.assertNotEquals(a.getTitle(), newTitle);
+        a.setTitle(newTitle);
+
+        String aJson = json(a);
+
+        String urlTemplate = String.format(baseUrl, this.patient.getId()) + "/" + a.getId();
+
+        this.mockMvc.perform(put(urlTemplate)
+                .contentType(contentType)
+                .content(aJson))
+                .andExpect(jsonPath("$.title", is(newTitle)))
+                .andExpect(status().isOk());
     }
 }

@@ -62,8 +62,9 @@ public class InterventionRestController extends AbstractRestController<Intervent
 
         Intervention currentIntervention = this.validateIntervention(intervention.getId());
 
-        //TODO: currently NoOp as nothing can be changed
-        //currentIntervention.setName(intervention.getName());
+        currentIntervention.setTitle(intervention.getTitle());
+        currentIntervention.setText(intervention.getText());
+        currentIntervention.setInstructions(intervention.getInstructions());
 
         return this.interventionRepository.save(currentIntervention);
 
