@@ -1,0 +1,178 @@
+databaseChangeLog:
+- changeSet:
+    id: 1500498269884-1
+    author: jordank (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: AssessmentPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_date
+            type: date
+        - column:
+            name: updated_date
+            type: date
+        - column:
+            name: instructions
+            type: VARCHAR(255)
+        - column:
+            name: careplan_id
+            type: BIGINT
+        - column:
+            name: text
+            type: VARCHAR(255)
+        - column:
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: type
+            type: VARCHAR(255)
+        tableName: Assessment
+- changeSet:
+    id: 1500498269884-2
+    author: jordank (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: CareplanPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_date
+            type: date
+        - column:
+            name: updated_date
+            type: date
+        - column:
+            constraints:
+              nullable: false
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: patient_id
+            type: BIGINT
+        tableName: Careplan
+- changeSet:
+    id: 1500498269884-3
+    author: jordank (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: InterventionPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_date
+            type: date
+        - column:
+            name: updated_date
+            type: date
+        - column:
+            name: instructions
+            type: VARCHAR(255)
+        - column:
+            name: careplan_id
+            type: BIGINT
+        - column:
+            name: text
+            type: VARCHAR(255)
+        - column:
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: dosage
+            type: INT
+        - column:
+            name: result_resettable
+            type: BIT
+        - column:
+            name: supply
+            type: INT
+        - column:
+            name: type
+            type: VARCHAR(255)
+        - column:
+            name: unit
+            type: VARCHAR(255)
+        tableName: Intervention
+- changeSet:
+    id: 1500498269884-4
+    author: jordank (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              primaryKey: true
+              primaryKeyName: PatientPK
+            name: id
+            type: BIGINT
+        - column:
+            name: created_date
+            type: date
+        - column:
+            name: updated_date
+            type: date
+        - column:
+            constraints:
+              nullable: false
+            name: first_name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: last_name
+            type: VARCHAR(255)
+        tableName: Patient
+- changeSet:
+    id: 1500498269884-5
+    author: jordank (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: careplan_id
+        baseTableName: Assessment
+        constraintName: FK5h4ciajy6c71xd0mre9lr1kif
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: Careplan
+- changeSet:
+    id: 1500498269884-6
+    author: jordank (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: careplan_id
+        baseTableName: Intervention
+        constraintName: FK5yuhkn7a2ln0bd31qy2ri5see
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: Careplan
+- changeSet:
+    id: 1500498269884-7
+    author: jordank (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: patient_id
+        baseTableName: Careplan
+        constraintName: FKlbeqiqai1wrwb4xmjkw5dinf5
+        deferrable: false
+        initiallyDeferred: false
+        referencedColumnNames: id
+        referencedTableName: Patient
+
