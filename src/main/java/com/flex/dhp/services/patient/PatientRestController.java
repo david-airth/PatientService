@@ -4,8 +4,10 @@ package com.flex.dhp.services.patient;
  * Created by david.airth on 7/10/17.
  */
 
-import com.flex.dhp.services.AbstractRestController;
-import com.flex.dhp.services.EntityNotFoundException;
+import com.flex.dhp.common.AbstractRestController;
+import com.flex.dhp.common.EntityNotFoundException;
+import com.flex.dhp.common.model.Patient;
+import com.flex.dhp.common.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;

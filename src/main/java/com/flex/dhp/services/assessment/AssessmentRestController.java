@@ -1,9 +1,9 @@
 package com.flex.dhp.services.assessment;
 
-import com.flex.dhp.services.AbstractRestController;
-import com.flex.dhp.services.EntityNotFoundException;
-import com.flex.dhp.services.careplan.Careplan;
-import com.flex.dhp.services.careplan.CareplanRepository;
+import com.flex.dhp.common.AbstractRestController;
+import com.flex.dhp.common.model.*;
+import com.flex.dhp.common.EntityNotFoundException;
+import com.flex.dhp.common.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestMapping;

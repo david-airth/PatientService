@@ -1,14 +1,10 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.assessment.Assessment;
-import com.flex.dhp.services.assessment.AssessmentRepository;
-import com.flex.dhp.services.careplan.Careplan;
-import com.flex.dhp.services.careplan.CareplanRepository;
-import com.flex.dhp.services.intervention.Intervention;
-import com.flex.dhp.services.intervention.InterventionRepository;
-import com.flex.dhp.services.intervention.InterventionType;
-import com.flex.dhp.services.patient.Patient;
-import com.flex.dhp.services.patient.PatientRepository;
+import com.flex.dhp.common.model.*;
+import com.flex.dhp.common.repository.AssessmentRepository;
+import com.flex.dhp.common.repository.CareplanRepository;
+import com.flex.dhp.common.repository.InterventionRepository;
+import com.flex.dhp.common.repository.PatientRepository;
 import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

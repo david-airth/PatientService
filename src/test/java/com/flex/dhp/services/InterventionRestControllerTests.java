@@ -1,7 +1,7 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.intervention.Intervention;
-import com.flex.dhp.services.intervention.InterventionType;
+import com.flex.dhp.common.model.Intervention;
+import com.flex.dhp.common.model.InterventionType;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

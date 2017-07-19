@@ -1,6 +1,6 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.assessment.Assessment;
+import com.flex.dhp.common.model.Assessment;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

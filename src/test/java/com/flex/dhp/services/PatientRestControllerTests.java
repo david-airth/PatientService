@@ -1,6 +1,6 @@
 package com.flex.dhp.services;
 
-import com.flex.dhp.services.patient.Patient;
+import com.flex.dhp.common.model.Patient;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,9 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
+import java.util.Date;
+
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -55,7 +55,7 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
     @Test
     public void updatePatient() throws Exception {
 
-        Assert.assertNull(this.patient.getUpdatedDate());
+        Date timestamp = this.patient.getUpdatedOn();
         String newFirstName = "Joan";
         Assert.assertEquals(this.patient.getFirstname(), firstName);
         Assert.assertNotEquals(this.patient.getFirstname(), newFirstName);
@@ -69,7 +69,7 @@ public class PatientRestControllerTests extends AbstractRestControllerTests {
                 .contentType(contentType)
                 .content(patientJson))
                 .andExpect(jsonPath("$.firstname", is(newFirstName)))
-                .andExpect(jsonPath("$.updatedDate", notNullValue()))
+                .andExpect(jsonPath("$.updatedOn", greaterThan(timestamp.getTime())))
                 .andExpect(status().isOk());
     }
 }
