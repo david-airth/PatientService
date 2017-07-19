@@ -15,7 +15,7 @@ public class Intervention extends AbstractActivity {
         this.type = type;
     }
 
-    @Column
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private InterventionType type;
 
@@ -23,28 +23,28 @@ public class Intervention extends AbstractActivity {
         return type;
     }
 
-    @Column
+    @Column(name = "supply")
     private int supply;
 
     public int getSupply() {
         return supply;
     }
 
-    @Column
+    @Column(name = "dosage")
     private int dosage;
 
     public int getDosage() {
         return dosage;
     }
 
-    @Column
+    @Column(name = "unit")
     private String unit;
 
     public String getUnit() {
         return unit;
     }
 
-    @Column
+    @Column(name = "result_resettable")
     private boolean resultResettable;
 
     public boolean isResultResettable() {

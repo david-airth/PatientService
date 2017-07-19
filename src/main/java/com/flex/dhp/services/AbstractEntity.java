@@ -28,7 +28,7 @@ public abstract class AbstractEntity {
         return id;
     }
 
-    @Column
+    @Column(name = "updated_date")
     @Temporal(TemporalType.DATE)
     private Date updatedDate;
 
@@ -36,7 +36,7 @@ public abstract class AbstractEntity {
         return updatedDate;
     }
 
-    @Column
+    @Column(name = "created_date")
     @Temporal(TemporalType.DATE)
     private Date createdDate;
 

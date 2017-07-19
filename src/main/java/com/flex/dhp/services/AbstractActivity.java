@@ -15,11 +15,11 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public class AbstractActivity extends AbstractEntity {
 
-    @Column
+    @Column(name = "title")
     private String title;
-    @Column
+    @Column(name = "text")
     private String text;
-    @Column
+    @Column(name = "instructions")
     private String instructions;
     @Column(name = "careplan_id", updatable = false, insertable = false)
     private long planId;

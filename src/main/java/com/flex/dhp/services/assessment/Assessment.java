@@ -15,7 +15,7 @@ public class Assessment extends AbstractActivity {
         super(careplan, title);
     }
 
-    @Column
+    @Column(name = "type")
     @Enumerated(EnumType.STRING)
     private AssessmentType type;
 

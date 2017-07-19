@@ -16,10 +16,10 @@ public class Patient extends AbstractEntity {
 	@GeneratedValue
 	private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "first_name", nullable = false)
     private String firstname;
 
-    @Column(nullable = false)
+    @Column(name = "last_name", nullable = false)
     private String lastname;
 
     @OneToMany(mappedBy = "patient")

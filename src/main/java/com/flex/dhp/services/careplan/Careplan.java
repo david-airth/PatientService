@@ -21,7 +21,7 @@ import java.util.Set;
 @Entity
 public class Careplan extends AbstractEntity {
 
-	@Column(nullable = false)
+	@Column(name = "name", nullable = false)
 	private String name;
 	public String getName() {
 		return name;
