@@ -1,4 +1,4 @@
-package com.flex.dhp.services.patient;
+package com.flex.dhp.services;
 
 /*
  * Created by david.airth on 7/10/17.
